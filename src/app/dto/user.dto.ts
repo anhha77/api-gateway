@@ -1,11 +1,11 @@
 import { IsString, IsInt, IsNotEmpty } from 'class-validator';
 
-export class CreatePaymentDto {
+export class UserDto {
   @IsString()
   @IsNotEmpty()
-  item: string;
+  name: string;
 
   @IsInt()
   @IsNotEmpty()
-  value: number;
+  age: number;
 }
