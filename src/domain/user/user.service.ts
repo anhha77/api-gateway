@@ -11,7 +11,7 @@ export class UserService {
 
   handleUserCreate(userData: UserDto) {
     this.userClient.send("create_user", new UserSerialize(userData.name, userData.age)).subscribe((user) => {
-      console.log(`Payment infomation: ${user.name} and ${user.age}`)
+      console.log(`Payment infomation: ${user.name} and ${user.age} and ${user.key}`)
     })
   }
 }

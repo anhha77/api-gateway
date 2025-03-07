@@ -11,7 +11,7 @@ export class PaymentService {
 
 	handlePaymentCreate(paymentData: PaymentDto) {
 		this.paymentClient.send("create_payment", new PaymentSerialize(paymentData.item, paymentData.value)).subscribe((payment) => {
-			console.log(`Payment infomation: ${payment.item} and ${payment.value}`)
+			console.log(`Payment infomation: ${payment.item} and ${payment.value} and ${payment.key}`)
 		})
 	}
 }
