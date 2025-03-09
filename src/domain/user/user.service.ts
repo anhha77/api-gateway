@@ -9,6 +9,16 @@ export class UserService {
     @Inject('USER_SERVICE') private readonly userClient: ClientKafka,
   ) {}
 
+  getUsers(): { name: string; age: number; key: string }[] {
+    let data: { name: string; age: number; key: string }[] = [];
+    this.userClient
+      .send('get_user', null)
+      .subscribe((users: { name: string; age: number; key: string }[]) => {
+        data = users;
+      });
+    return data;
+  }
+
   handleUserCreate(userData: UserDto) {
     this.userClient
       .send('create_user', new UserSerialize(userData.name, userData.age))

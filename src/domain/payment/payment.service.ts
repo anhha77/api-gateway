@@ -9,6 +9,16 @@ export class PaymentService {
     @Inject('PAYMENT_SERVICE') private readonly paymentClient: ClientKafka,
   ) {}
 
+  getPayments(): { item: string; value: number; key: string }[] {
+    let data: { item: string; value: number; key: string }[] = [];
+    this.paymentClient
+      .send('get_payment', null)
+      .subscribe((payments: { item: string; value: number; key: string }[]) => {
+        data = payments;
+      });
+    return data;
+  }
+
   handlePaymentCreate(paymentData: PaymentDto) {
     this.paymentClient
       .send(

@@ -1,14 +1,26 @@
-import { Body, Controller, Get, Inject, OnModuleInit, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  OnModuleInit,
+  Post,
+} from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 import { UserService } from 'src/domain/user/user.service';
 import { UserDto } from '../dto/user.dto';
 
 @Controller('user')
-export class UserController implements OnModuleInit{
+export class UserController implements OnModuleInit {
   constructor(
     private readonly userService: UserService,
-    @Inject("USER_SERVICE") private readonly userClient: ClientKafka
+    @Inject('USER_SERVICE') private readonly userClient: ClientKafka,
   ) {}
+
+  @Get()
+  getUsers(): { name: string; age: number; key: string }[] {
+    return this.userService.getUsers();
+  }
 
   @Post()
   createUser(@Body() userData: UserDto) {
@@ -16,6 +28,6 @@ export class UserController implements OnModuleInit{
   }
 
   onModuleInit() {
-    this.userClient.subscribeToResponseOf("create_user")
+    this.userClient.subscribeToResponseOf('create_user');
   }
 }
