@@ -14,7 +14,7 @@ export class UserService {
       .send('create_user', new UserSerialize(userData.name, userData.age))
       .subscribe((user: { name: string; age: number; key: string }) => {
         console.log(
-          `Payment infomation: ${user.name} and ${user.age} and ${user.key}`,
+          `User infomation: ${user.name} and ${user.age} and ${user.key}`,
         );
       });
   }
