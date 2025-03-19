@@ -28,6 +28,7 @@ export class PaymentController implements OnModuleInit {
   }
 
   onModuleInit() {
-    this.paymentCLient.subscribeToResponseOf('create_payment');
+    this.paymentCLient.subscribeToResponseOf('create-payment.reply');
+    this.paymentCLient.subscribeToResponseOf("get-payment.reply")
   }
 }

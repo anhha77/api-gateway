@@ -12,7 +12,7 @@ export class PaymentService {
   getPayments(): { item: string; value: number; key: string }[] {
     let data: { item: string; value: number; key: string }[] = [];
     this.paymentClient
-      .send('get_payment', null)
+      .send('get-payment', null)
       .subscribe((payments: { item: string; value: number; key: string }[]) => {
         data = payments;
       });
@@ -22,7 +22,7 @@ export class PaymentService {
   handlePaymentCreate(paymentData: PaymentDto) {
     this.paymentClient
       .send(
-        'create_payment',
+        'create-payment',
         new PaymentSerialize(paymentData.item, paymentData.value),
       )
       .subscribe((payment: { item: string; value: number; key: string }) => {

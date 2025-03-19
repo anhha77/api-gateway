@@ -3,6 +3,7 @@ import { UserController } from "../controller/user.controller";
 import { UserService } from "src/domain/user/user.service";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 
+
 @Module({
   imports: [
     ClientsModule.register([
@@ -15,12 +16,15 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
             brokers: ['localhost:9094'],
           },
           consumer: {
-            groupId: 'user-consumer',
+            groupId: `user-consumer`,
           },
+          producerOnlyMode: true
         },
       },
     ])
   ],
+
+  
   providers: [UserService],
   controllers: [UserController]
 })

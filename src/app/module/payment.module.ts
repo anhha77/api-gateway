@@ -17,6 +17,7 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
           consumer: {
             groupId: 'payment-consumer',
           },
+          producerOnlyMode: true
         },
       },
     ])

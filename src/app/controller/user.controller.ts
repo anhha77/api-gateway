@@ -24,10 +24,11 @@ export class UserController implements OnModuleInit {
 
   @Post()
   createUser(@Body() userData: UserDto) {
-    this.userService.handleUserCreate(userData);
+    return this.userService.handleUserCreate(userData);
   }
 
   onModuleInit() {
-    this.userClient.subscribeToResponseOf('create_user');
+    this.userClient.subscribeToResponseOf('create-user');
+    this.userClient.subscribeToResponseOf('get-user');
   }
 }

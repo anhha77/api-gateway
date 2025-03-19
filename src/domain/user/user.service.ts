@@ -12,7 +12,7 @@ export class UserService {
   getUsers(): { name: string; age: number; key: string }[] {
     let data: { name: string; age: number; key: string }[] = [];
     this.userClient
-      .send('get_user', null)
+      .send('get-user', null)
       .subscribe((users: { name: string; age: number; key: string }[]) => {
         data = users;
       });
@@ -20,12 +20,12 @@ export class UserService {
   }
 
   handleUserCreate(userData: UserDto) {
+    let data = {};
     this.userClient
-      .send('create_user', new UserSerialize(userData.name, userData.age))
+      .send('create-user', new UserSerialize(userData.name, userData.age))
       .subscribe((user: { name: string; age: number; key: string }) => {
-        console.log(
-          `User infomation: ${user.name} and ${user.age} and ${user.key}`,
-        );
+        data = user
       });
+    return data
   }
 }
