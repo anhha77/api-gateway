@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Inject,
+  OnModuleDestroy,
   OnModuleInit,
   Post,
 } from '@nestjs/common';
@@ -11,24 +12,29 @@ import { UserService } from 'src/domain/user/user.service';
 import { UserDto } from '../dto/user.dto';
 
 @Controller('user')
-export class UserController implements OnModuleInit {
+export class UserController implements OnModuleInit, OnModuleDestroy {
   constructor(
     private readonly userService: UserService,
     @Inject('USER_SERVICE') private readonly userClient: ClientKafka,
   ) {}
 
   @Get()
-  getUsers(): { name: string; age: number; key: string }[] {
-    return this.userService.getUsers();
+  async getUsers(): Promise<{ name: string; age: number; key: string }[]> {
+    return await this.userService.getUsers();
   }
 
   @Post()
-  createUser(@Body() userData: UserDto) {
-    return this.userService.handleUserCreate(userData);
+  async createUser(@Body() userData: UserDto): Promise<{name: string, age: number, key: string}> {
+    return await this.userService.handleUserCreate(userData);
   }
 
-  onModuleInit() {
+  async onModuleInit() {
     this.userClient.subscribeToResponseOf('create-user');
     this.userClient.subscribeToResponseOf('get-user');
+    await this.userClient.connect();
+  }
+
+  async onModuleDestroy() {
+      await this.userClient.close();
   }
 }

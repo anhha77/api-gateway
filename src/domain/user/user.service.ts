@@ -9,7 +9,7 @@ export class UserService {
     @Inject('USER_SERVICE') private readonly userClient: ClientKafka,
   ) {}
 
-  getUsers(): { name: string; age: number; key: string }[] {
+  async getUsers(): Promise<{ name: string; age: number; key: string }[]> {
     let data: { name: string; age: number; key: string }[] = [];
     this.userClient
       .send('get-user', null)
@@ -19,8 +19,8 @@ export class UserService {
     return data;
   }
 
-  handleUserCreate(userData: UserDto) {
-    let data = {};
+  async handleUserCreate(userData: UserDto): Promise<{name: string, age: number, key: string}> {
+    let data: any = {};
     this.userClient
       .send('create-user', new UserSerialize(userData.name, userData.age))
       .subscribe((user: { name: string; age: number; key: string }) => {

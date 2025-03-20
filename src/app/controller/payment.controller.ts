@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Inject,
+  OnModuleDestroy,
   OnModuleInit,
   Post,
 } from '@nestjs/common';
@@ -11,24 +12,31 @@ import { PaymentService } from 'src/domain/payment/payment.service';
 import { PaymentDto } from '../dto/payment.dto';
 
 @Controller('payment')
-export class PaymentController implements OnModuleInit {
+export class PaymentController implements OnModuleInit, OnModuleDestroy {
   constructor(
     private readonly paymentService: PaymentService,
     @Inject('PAYMENT_SERVICE') private readonly paymentCLient: ClientKafka,
   ) {}
 
   @Get()
-  getPayments(): { item: string; value: number; key: string }[] {
-    return this.paymentService.getPayments();
+  async getPayments(): Promise<{ item: string; value: number; key: string }[]> {
+    return await this.paymentService.getPayments();
   }
 
   @Post()
-  createPayment(@Body() paymentData: PaymentDto) {
-    this.paymentService.handlePaymentCreate(paymentData);
+  async createPayment(@Body() paymentData: PaymentDto): Promise<{item: string, value: number, key: string}> {
+    return await this.paymentService.handlePaymentCreate(paymentData);
   }
 
-  onModuleInit() {
-    this.paymentCLient.subscribeToResponseOf('create-payment.reply');
-    this.paymentCLient.subscribeToResponseOf("get-payment.reply")
+  async onModuleInit() {
+      this.paymentCLient.subscribeToResponseOf('create-payment.reply');
+      this.paymentCLient.subscribeToResponseOf("get-payment.reply")
+      await this.paymentCLient.connect()
+    }
+
+  async onModuleDestroy() {
+      this.paymentCLient.close();
   }
 }
+
+

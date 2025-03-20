@@ -1,5 +1,5 @@
 export class UserSerialize {
-	constructor(private readonly name: string, private readonly age: number) {
+	constructor(private name: string, private age: number) {
 
 	}
 

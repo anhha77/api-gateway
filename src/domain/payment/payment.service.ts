@@ -9,7 +9,7 @@ export class PaymentService {
     @Inject('PAYMENT_SERVICE') private readonly paymentClient: ClientKafka,
   ) {}
 
-  getPayments(): { item: string; value: number; key: string }[] {
+  async getPayments(): Promise<{ item: string; value: number; key: string }[]> {
     let data: { item: string; value: number; key: string }[] = [];
     this.paymentClient
       .send('get-payment', null)
@@ -19,16 +19,16 @@ export class PaymentService {
     return data;
   }
 
-  handlePaymentCreate(paymentData: PaymentDto) {
+  async handlePaymentCreate(paymentData: PaymentDto): Promise<{item: string, value: number, key: string}> {
+    let data: any = {}
     this.paymentClient
       .send(
         'create-payment',
         new PaymentSerialize(paymentData.item, paymentData.value),
       )
       .subscribe((payment: { item: string; value: number; key: string }) => {
-        console.log(
-          `Payment infomation: ${payment.item} and ${payment.value} and ${payment.key}`,
-        );
+        data = payment
       });
+    return data
   }
 }
