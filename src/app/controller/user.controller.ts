@@ -27,9 +27,8 @@ export class UserController implements OnModuleInit, OnModuleDestroy {
   }
 
   @Post()
-  async createUser(@Body() userData: UserDto): Promise<any> {
-    await this.userService.handleUserCreate(userData);
-    return "hi"
+  async createUser(@Body() userData: UserDto): Promise<{name: string, age: number, key: string}> {
+    return await this.userService.handleUserCreate(userData);
   }
 
   async onModuleInit() {
