@@ -6,6 +6,7 @@ import {
   OnModuleDestroy,
   OnModuleInit,
   Post,
+  
 } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 import { UserService } from 'src/domain/user/user.service';
@@ -20,12 +21,15 @@ export class UserController implements OnModuleInit, OnModuleDestroy {
 
   @Get()
   async getUsers(): Promise<{ name: string; age: number; key: string }[]> {
-    return await this.userService.getUsers();
+    let result: {name: string; age: number; key: string }[] = await this.userService.getUsers();
+    result = result.map((item: {name: string, age: number, key: string}) => ({name: item.name, age: item.age, key: item.key})) 
+    return result
   }
 
   @Post()
-  async createUser(@Body() userData: UserDto): Promise<{name: string, age: number, key: string}> {
-    return await this.userService.handleUserCreate(userData);
+  async createUser(@Body() userData: UserDto): Promise<any> {
+    await this.userService.handleUserCreate(userData);
+    return "hi"
   }
 
   async onModuleInit() {

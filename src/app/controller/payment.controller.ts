@@ -29,8 +29,8 @@ export class PaymentController implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit() {
-      this.paymentCLient.subscribeToResponseOf('create-payment.reply');
-      this.paymentCLient.subscribeToResponseOf("get-payment.reply")
+      this.paymentCLient.subscribeToResponseOf('create-payment');
+      this.paymentCLient.subscribeToResponseOf("get-payment")
       await this.paymentCLient.connect()
     }
 

@@ -10,22 +10,20 @@ export class UserService {
   ) {}
 
   async getUsers(): Promise<{ name: string; age: number; key: string }[]> {
-    let data: { name: string; age: number; key: string }[] = [];
-    this.userClient
-      .send('get-user', null)
-      .subscribe((users: { name: string; age: number; key: string }[]) => {
-        data = users;
-      });
-    return data;
+    return new Promise((resolve) => {
+      this.userClient.send("get-user", "hi").subscribe((users: { name: string; age: number; key: string }[]) => {
+        resolve(users)
+      })
+    })
   }
 
   async handleUserCreate(userData: UserDto): Promise<{name: string, age: number, key: string}> {
-    let data: any = {};
-    this.userClient
+    return new Promise((resolve) => {
+      this.userClient
       .send('create-user', new UserSerialize(userData.name, userData.age))
       .subscribe((user: { name: string; age: number; key: string }) => {
-        data = user
+        resolve(user)
       });
-    return data
+    })
   }
 }

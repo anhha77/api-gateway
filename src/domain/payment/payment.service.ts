@@ -10,25 +10,25 @@ export class PaymentService {
   ) {}
 
   async getPayments(): Promise<{ item: string; value: number; key: string }[]> {
-    let data: { item: string; value: number; key: string }[] = [];
-    this.paymentClient
-      .send('get-payment', null)
+    return new Promise((resolve) => {
+      this.paymentClient
+      .send('get-payment', "hi")
       .subscribe((payments: { item: string; value: number; key: string }[]) => {
-        data = payments;
+        resolve(payments)
       });
-    return data;
+    })
   }
 
   async handlePaymentCreate(paymentData: PaymentDto): Promise<{item: string, value: number, key: string}> {
-    let data: any = {}
-    this.paymentClient
+    return new Promise((resolve) => {
+      this.paymentClient
       .send(
         'create-payment',
         new PaymentSerialize(paymentData.item, paymentData.value),
       )
       .subscribe((payment: { item: string; value: number; key: string }) => {
-        data = payment
+        resolve(payment)
       });
-    return data
+    })
   }
 }
